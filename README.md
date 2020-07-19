@@ -10,4 +10,4 @@ You can clone this repo and try to run it locally. For this you need next simple
 1. Clone repo
 2. Create virtual environment https://docs.python.org/3/library/venv.html
 3. Install requirements `pip install -r requirements.txt`
-4. Execute command `locust -f test/name_of_locustfile.py` (please note, in order to run tests for todoist you have to register at https://todoist.com/, copy API token in settings and provide it as env variable *before* `locust` command)
+4. Execute command `locust -f test/name_of_locustfile.py` (please note, in order to run tests against todoist api you have to register at https://todoist.com/, copy API token in settings and provide it as env variable *before* `locust` command, e.g. `apitoken=your_token locust -f test/rest_api.py`)
