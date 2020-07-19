@@ -10,13 +10,12 @@ class UserBehaviour(SequentialTaskSet):
 
     def __init__(self, parent):
         super().__init__(parent)
-        self.token = getenv("apikey")
+        self.token = getenv("apitoken")
         self.random_id = None
         self.project_id = None
         self.task_id = None
 
     def on_start(self):
-        # Generate id
         # Create project
         print("Create project")
         response = self.client.post(
