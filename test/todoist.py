@@ -1,4 +1,5 @@
 from http import HTTPStatus
+from os import getenv
 
 from locust import HttpUser, SequentialTaskSet, task, between
 import uuid
@@ -9,7 +10,7 @@ class UserBehaviour(SequentialTaskSet):
 
     def __init__(self, parent):
         super().__init__(parent)
-        self.token = "e2ae911ddddf7ce37b9588146c5187a3b4ddf2d8"
+        self.token = getenv("apikey")
         self.random_id = None
         self.project_id = None
         self.task_id = None
