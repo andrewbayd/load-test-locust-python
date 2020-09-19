@@ -5,6 +5,8 @@ from locust import HttpUser, SequentialTaskSet, task, between
 import uuid
 import json
 
+from log import logger
+
 
 class UserBehaviour(SequentialTaskSet):
 
@@ -17,7 +19,7 @@ class UserBehaviour(SequentialTaskSet):
 
     def on_start(self):
         # Create project
-        print("Create project")
+        logger.info("Create project")
         response = self.client.post(
             "/projects",
             data=json.dumps({"name": "Test project"}),
@@ -32,7 +34,7 @@ class UserBehaviour(SequentialTaskSet):
 
     @task
     def create_task(self):
-        print("Create task")
+        logger.info("Create task")
         response = self.client.post(
             "/tasks",
             data=json.dumps({
@@ -51,7 +53,7 @@ class UserBehaviour(SequentialTaskSet):
 
     @task
     def complete_task(self):
-        print("Complete task")
+        logger.info("Complete task")
         response = self.client.post(
             f"/tasks/{self.task_id}/close",
             headers={"Authorization": f"Bearer {self.token}"},
@@ -59,7 +61,7 @@ class UserBehaviour(SequentialTaskSet):
         assert response.status_code == HTTPStatus.NO_CONTENT, f"Failed to complete a task, {response.text}"
 
     def on_stop(self):
-        print("Delete a project")
+        logger.info("Delete a project")
         self.client.delete(
             f"/projects/{self.project_id}",
             headers={"Authorization": f"Bearer {self.token}"},

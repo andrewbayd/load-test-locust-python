@@ -3,6 +3,8 @@ from http import HTTPStatus
 
 from locust import task, HttpUser, SequentialTaskSet, between, TaskSet
 
+from log import logger
+
 
 class UserBehaviour(TaskSet):
 
@@ -15,13 +17,13 @@ class UserBehaviour(TaskSet):
         self.view_state = re.findall("j_id\d+:j_id\d+", response.text)[0]
 
     def on_start(self):
-        print("Launch URL")
+        logger.info("Launch URL")
         launch_res = self.client.get("/index.jsf", name="Launch URL")
         assert launch_res.status_code == HTTPStatus.OK, "Failed to launch URL"
         self.cookies["JSESSIONID"] = launch_res.cookies["JSESSIONID"]
         self.update_view_state(launch_res)
 
-        print("Perform login")
+        logger.info("Perform login")
         login_res = self.client.post(
             "/index.jsf",
             data={
@@ -43,14 +45,14 @@ class UserBehaviour(TaskSet):
 
         @task
         def select_autoquote(self):
-            print("Select Auto Quote in menu")
+            logger.info("Select Auto Quote in menu")
             response = self.client.get("/quote_auto.jsf", name="Select Auto Quote", cookies=self.parent.cookies)
             assert response.status_code == HTTPStatus.OK, "Failed to select Auto Quote"
             self.parent.update_view_state(response)
 
         @task
         def complete_step_1(self):
-            print("Complete step 1 of Auto Quote")
+            logger.info("Complete step 1 of Auto Quote")
             response = self.client.post(
                 "/quote_auto.jsf",
                 data={
@@ -69,7 +71,7 @@ class UserBehaviour(TaskSet):
 
         @task
         def complete_step_2(self):
-            print("Complete step 2 of Auto Quote")
+            logger.info("Complete step 2 of Auto Quote")
             response = self.client.post(
                 "/quote_auto2.jsf",
                 data={
@@ -88,7 +90,7 @@ class UserBehaviour(TaskSet):
 
         @task
         def complete_step_3(self):
-            print("Complete step 3 of Auto Quote")
+            logger.info("Complete step 3 of Auto Quote")
             response = self.client.post(
                 "/quote_auto3.jsf",
                 data={
@@ -110,7 +112,7 @@ class UserBehaviour(TaskSet):
 
         @task
         def proceed_to_result(self):
-            print("Proceed to Auto Quote result")
+            logger.info("Proceed to Auto Quote result")
             response = self.client.post(
                 "/quote_result.jsf",
                 data={
@@ -126,10 +128,7 @@ class UserBehaviour(TaskSet):
 
         @task
         def purchase_quote(self):
-            print("Purchase an auto quote")
-            payload = {
-
-            }
+            logger.info("Purchase an auto quote")
             response = self.client.post(
                 "/purchase_quote.jsf",
                 data={
@@ -154,7 +153,7 @@ class UserBehaviour(TaskSet):
 
         @task
         def select_agent_lookup(self):
-            print("Select Agent lookup in menu")
+            logger.info("Select Agent lookup in menu")
             response = self.client.get(
                 "/agent_lookup.jsf",
                 cookies=self.parent.cookies,
@@ -165,7 +164,7 @@ class UserBehaviour(TaskSet):
 
         @task
         def search_all_agents(self):
-            print("Perform search for all agents")
+            logger.info("Perform search for all agents")
             response = self.client.post(
                 "/agent_lookup.jsf",
                 data={

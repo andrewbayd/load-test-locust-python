@@ -3,12 +3,13 @@ from http import HTTPStatus
 from locust import HttpUser, SequentialTaskSet, task, between
 
 from helper import verify_response_time
+from log import logger
 
 
 class UserBehaviour(SequentialTaskSet):
 
     def on_start(self):
-        print("Login to account")
+        logger.info("Login to account")
         response = self.client.post(
             "/login.php",
             data={
@@ -24,7 +25,7 @@ class UserBehaviour(SequentialTaskSet):
 
     @task
     def find_flight(self):
-        print("Perform request to find a flight")
+        logger.info("Perform request to find a flight")
         response = self.client.post(
             "/mercuryreservation2.php",
             data={
@@ -47,7 +48,7 @@ class UserBehaviour(SequentialTaskSet):
 
     @task
     def select_flight(self):
-        print("Perform request to select a flight")
+        logger.info("Perform request to select a flight")
         response = self.client.post(
             "/mercurypurchase.php",
             name="Select a flight",
@@ -70,7 +71,7 @@ class UserBehaviour(SequentialTaskSet):
 
     @task
     def book_flight(self):
-        print("Perform request to book flight")
+        logger.info("Perform request to book flight")
 
         response = self.client.post(
             "/mercurypurchase2.php",
